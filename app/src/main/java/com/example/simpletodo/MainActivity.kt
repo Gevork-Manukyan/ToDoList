@@ -1,5 +1,6 @@
 package com.example.simpletodo
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     var listOfTasks = mutableListOf<String>()
     lateinit var adapter: TaskItemAdapter
+    val EDIT_TASK_REQUEST_CODE = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,8 +27,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         loadItems()
 
-
         val onLongClickListener = object : TaskItemAdapter.OnLongClickListener {
+            override fun onItemClick(position: Int) {
+
+                // 1. Send user to new activity with item data
+                val taskText = listOfTasks.get(position)
+                val intent = getEditTaskIntent()
+
+                intent.putExtra("task_text", taskText)
+                intent.putExtra("position", position)
+
+                // 1.5 Activity result is handled by 'onActivityResult()'
+                startActivityForResult(intent, EDIT_TASK_REQUEST_CODE)
+
+                // 2. Safe file
+                saveItems()
+            }
+
+
+
             override fun onItemLongClicked(position: Int) {
                 // 1. Remove item from list
                 listOfTasks.removeAt(position)
@@ -36,6 +55,8 @@ class MainActivity : AppCompatActivity() {
                 saveItems()
             }
         }
+
+
 
         // Lookup the recyclerview in activity layout                              // casting
         var rvTasks: RecyclerView = findViewById<RecyclerView>(R.id.recyclerView) as RecyclerView
@@ -74,10 +95,31 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        saveItems()
-//    }
+    //*** Calling Another Activity ***//
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == RESULT_OK) {
+            when(requestCode) {
+
+                EDIT_TASK_REQUEST_CODE -> {
+                    Log.i("request-test", "HERE")
+                    val taskPosition = data?.extras?.getInt("position")
+                    val taskText = data?.extras?.getString("task_text")
+                    listOfTasks[taskPosition!!] = taskText!!
+                    adapter.notifyItemChanged(taskPosition)
+                }
+
+            }
+        } else if (resultCode == RESULT_CANCELED) {
+            return
+        }
+    }
+
+    fun getEditTaskIntent() : Intent {
+        return Intent(this, EditTaskActivity::class.java)
+    }
 
     //*** Save the data the user has changed ***//
     //   By writing and reading from a file     //
