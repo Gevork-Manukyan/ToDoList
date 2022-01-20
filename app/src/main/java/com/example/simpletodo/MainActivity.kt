@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 listOfTasks.removeAt(position)
                 // 2. Notify adapter that our data set changed
                 adapter.notifyDataSetChanged()
+                // 3. Save file
+                saveItems()
             }
         }
 
