@@ -32,7 +32,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+My biggest challenges came from unfamiliarity with Kotlin along with the adapter class. Having no prior experience with Kotlin, I spent quite some time looking up syntax and other conventions of Kotlin. I also had a tough time understanding the adapter class and had to look up extra resources to get a better understanding of how it works. 
 
 ## License
 
