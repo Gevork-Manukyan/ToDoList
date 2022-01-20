@@ -15,6 +15,7 @@ class TaskItemAdapter(val listOfItems: List<String>, val longClickListener: OnLo
 
 
     interface OnLongClickListener {
+        fun onItemClick(position: Int)
         fun onItemLongClicked(position: Int)
     }
 
@@ -26,6 +27,10 @@ class TaskItemAdapter(val listOfItems: List<String>, val longClickListener: OnLo
 
         init {
             textView = itemView.findViewById(android.R.id.text1)
+
+            itemView.setOnClickListener {
+                longClickListener.onItemClick(adapterPosition)
+            }
 
             itemView.setOnLongClickListener {
                 longClickListener.onItemLongClicked(adapterPosition)
