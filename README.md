@@ -4,7 +4,7 @@
 
 Submitted by: **Gevork Manukyan**
 
-Time spent: **2.3** hours spent in total
+Time spent: **2.7** hours spent in total
 
 ## User Stories
 
